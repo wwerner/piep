@@ -1,1 +1,3 @@
-console.log('foo')
+export const foo = () => 'foo'
+
+console.log(foo())
