@@ -21,3 +21,9 @@ jobs:
         run: yarn test:coverage
       - name: Build
         run: yarn build
+      - uses: actions/upload-artifact@v2
+        with:
+          name: piep
+          path: |
+            build
+            coverage
