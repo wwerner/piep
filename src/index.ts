@@ -1,3 +1,13 @@
-export const foo = () => 'foo'
+import { digitGenerator } from "./pi"
+import { stdout } from 'process';
 
-console.log(foo())
+const digits = digitGenerator()
+
+stdout.write("π: ")
+stdout.write(`${digits.next().value}`)
+stdout.write(".")
+for (var i = 1; i < 1000; i++) {
+    stdout.write(`${digits.next().value}`)
+}
+stdout.write("\n")
+
