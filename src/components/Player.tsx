@@ -65,7 +65,7 @@ const Player: FunctionComponent = () => {
   };
 
   const drawDigit = (digit: number) => {
-    setPi((s) => s === '' ? `${digit}.` : `${s}${digit}`); // add decimal separator after first digit
+    setPi((s) => (s === "" ? `${digit}.` : `${s}${digit}`)); // add decimal separator after first digit
   };
 
   const play = () =>
@@ -96,10 +96,30 @@ const Player: FunctionComponent = () => {
 
   return (
     <div className="player">
-      <button onClick={play}>Listen to π</button>
-      <button onClick={stop}>OMG, stahp!</button>
+      <button
+        className="button is-large is-primary"
+        onClick={play}
+        aria-label="Play"
+        style={{ width: "260px", marginRight: "10px" }}
+      >
+        <span className="icon is-medium">
+          <i className="far fa-2x fa-play-circle"></i>
+        </span>
+      </button>
+
+      <button
+        className="button is-large is-danger"
+        onClick={stop}
+        aria-label="Stop"
+        style={{ width: "260px" }}
+      >
+        <span className="icon is-medium">
+          <i className="far fa-2x fa-stop-circle"></i>
+        </span>
+      </button>
+
       <div ref={scoreContainer}></div>
-      <div className="pi">{pi}</div>
+      <div className="pi is-size-4">{pi ? pi : (<button style={{border: 0, backgroundColor:"transparent"}} className="button is-loading"></button>)}</div>
     </div>
   );
 };
