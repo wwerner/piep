@@ -1,15 +1,18 @@
-import * as React from 'react';
-import { FunctionComponent } from 'react';
+import * as React from "react";
+import { FunctionComponent, useEffect, useRef } from "react";
+import { Renderer } from "react-dom";
 
-import * as Tone from 'tone'
-import { digitGenerator } from '../pi';
+import * as Tone from "tone";
+import Vex from "vexflow";
 
+import '../App.css';
+import { digitGenerator } from "../pi";
 
-interface PlayerProps {
-    
-}
 const digits = digitGenerator();
+const VF = Vex.Flow;
 
+
+// prettier-ignore
 const MIDI_NOTES = [
     "C_1", "C#_1", "D_1", "D#_1", "E_1", "F_1", "F#_1", "G_1", "G#_1", "A_1", "A#_1", "B_1",
     "C0", "C#0", "D0", "D#0", "E0", "F0", "F#0", "G0", "G#0", "A0", "A#0", "B0",
@@ -24,33 +27,76 @@ const MIDI_NOTES = [
     "C9", "C#9", "D9", "D#9", "E9", "F9", "F#9", "G9"
 ];
 
+interface PlayerProps {}
 const Player: FunctionComponent<PlayerProps> = () => {
-const scale = [0,2,3,5,7,8,10,12]; // natural minor
-const startNoteIdx = 60 // C3
+  const startNoteIdx = 60; // C3
 
+  const play = async () => {
+    await Tone.start();
+    const synth = new Tone.Synth().toDestination();
 
-    const play = async () => {
-        await Tone.start()
-        const synth = new Tone.Synth().toDestination();
+    const loop = new Tone.Loop((time) => {
+      let digit = digits.next().value;
+      let note = MIDI_NOTES[startNoteIdx + digit];
+      console.log(digit, "->", note);
+      synth.triggerAttackRelease(note, "8n", time);
 
-        const loop = new Tone.Loop(time => {
-            let note = MIDI_NOTES[startNoteIdx + digits.next().value]
-            console.log(note)
-            synth.triggerAttackRelease(note, "8n", time)
-        }, "4n").start(0)
+      let scoreNote = new VF.StaveNote({
+        keys: [
+          `${note.substring(0, note.length - 1)}/${note.substring(
+            note.length - 1
+          )}`,
+        ],
+        duration: "8",
+      })
+        .setContext(scoreContext)
+        .setStave(stave)
 
-    Tone.Transport.start()
+        tickContext.addTickable(scoreNote)
+        const group = scoreContext.openGroup();
+        scoreNote.draw()
+        scoreContext.closeGroup()
+        group.classList.add('scroll')
+        const box = group.getBoundingClientRect();
+        group.classList.add('scrolling')
+    }, "4n").start(0);
+
+    Tone.Transport.start();
+  };
+
+  const stop = () => {
+    Tone.Transport.stop();
+    Tone.Transport.cancel(0);
+  };
+
+  const scoreContainer = useRef<HTMLDivElement>(null);
+  let scoreRenderer = useRef<SVGElement>(null);
+  let scoreContext: Vex.Flow.SVGContext;
+  let stave: Vex.Flow.Stave;
+  let tickContext: Vex.Flow.TickContext;
+  useEffect(() => {
+    if (scoreContainer.current) {
+      scoreRenderer = new VF.Renderer(
+        scoreContainer.current,
+        VF.Renderer.Backends.SVG
+      );
+
+      scoreRenderer.resize(500, 500);
+      scoreContext = scoreRenderer.getContext();
+      tickContext = new VF.TickContext();
+      tickContext.preFormat().setX(400);
+      stave = new VF.Stave(10, 10, 10000).addClef("treble");
+      stave.setContext(scoreContext).draw();
     }
+  }, []);
 
-    const stop = () => {
-        Tone.Transport.stop()
-        Tone.Transport.cancel(0)
-    }
+  return (
+    <div className="player">
+      <button onClick={play}>Listen to π</button>
+      <button onClick={stop}>OMG, stahp!</button>
+      <div ref={scoreContainer}></div>
+    </div>
+  );
+};
 
-    return ( <div className="player">
-        <button onClick={play}>Listen to π</button>
-        <button onClick={stop}>OMG, stahp!</button>
-    </div> );
-}
- 
 export default Player;

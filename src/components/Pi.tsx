@@ -15,7 +15,7 @@ export const Pi = () => {
   }
 
   return (
-    <div style={{width: "80vw", wordWrap: "break-word"}}>
+    <div style={{wordWrap: "break-word"}}>
       <h1>π</h1>
       <p>3.{decimalPlaces.join('')}</p>
     </div>

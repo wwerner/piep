@@ -1,0 +1,38 @@
+body {
+    background-color: #f5f4ef;
+    margin: 0;
+    padding: 0;
+}
+.app {
+    margin-top: 25px;
+  width: 100vw;
+  height: 100vw;
+}
+
+.main {
+  width: 800px;
+  margin: auto;
+  padding: 10px;
+  border-radius: 5px;
+  background: #f5f4ef;
+  box-shadow:  -20px 20px 60px #71706e,
+               20px -20px 60px #ffffff;
+}
+
+.scroll {
+  transition: transform 5s linear;
+}
+
+.scrolling {
+  transform: translate(-400px, 0);
+  animation: fadeout 5.2s ease-out forwards;
+}
+
+@keyframes fadeout {
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
