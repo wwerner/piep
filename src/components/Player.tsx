@@ -19,6 +19,7 @@ const Player: FunctionComponent = () => {
   let stave: Vex.Flow.Stave;
 
   const [pi, setPi] = useState("");
+  const [playing, setPlaying] = useState(false);
 
   useEffect(() => {
     if (scoreContainer.current) {
@@ -78,12 +79,14 @@ const Player: FunctionComponent = () => {
         }, "4n").start(0)
       )
       .then((_loop) => Tone.Transport.start())
+      .then((_transport) => setPlaying(true))
       .catch((err) => {
         console.error(err);
         Tone.Transport.stop().cancel(0);
       });
 
   const stop = () => {
+    setPlaying(false);
     Tone.Transport.stop().cancel(0);
   };
 
@@ -99,6 +102,7 @@ const Player: FunctionComponent = () => {
       <div ref={scoreContainer} style={{ marginBottom: "15px" }}></div>
       <button
         className="button is-large is-primary"
+        disabled={playing}
         onClick={play}
         aria-label="Play"
         style={{ width: "256.5px", marginRight: "10px", marginLeft: "7px" }}
@@ -111,6 +115,7 @@ const Player: FunctionComponent = () => {
       <button
         className="button is-large is-danger"
         onClick={stop}
+        disabled={!playing}
         aria-label="Stop"
         style={{ width: "256.5px", marginBottom: "10px" }}
       >
