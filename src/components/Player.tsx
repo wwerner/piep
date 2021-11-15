@@ -81,7 +81,7 @@ const Player: FunctionComponent<PlayerProps> = () => {
         VF.Renderer.Backends.SVG
       );
 
-      scoreRenderer.resize(500, 500);
+      scoreRenderer.resize(530, 110);
       scoreContext = scoreRenderer.getContext();
       tickContext = new VF.TickContext();
       tickContext.preFormat().setX(400);
