@@ -2,7 +2,7 @@ import * as React from "react";
 import { FunctionComponent, useEffect, useRef } from "react";
 
 import * as Tone from "tone";
-import Vex, { RenderContext, Stave, TickContext } from "vexflow";
+import Vex from "vexflow";
 import { DEFAULT_NOTE_IDX, NOTES, SCORE_NOTES } from "../audio";
 
 import { digitGenerator } from "../pi";
@@ -14,9 +14,9 @@ const digits = digitGenerator();
 const Player: FunctionComponent = () => {
   const scoreContainer = useRef<HTMLDivElement>(null);
   let scoreRenderer;
-  let scoreContext: RenderContext;
-  let stave: Stave;
-  let tickContext: TickContext;
+  let scoreContext: Vex.IRenderContext;
+  let stave: Vex.Flow.Stave;
+  let tickContext: Vex.Flow.TickContext;
 
   useEffect(() => {
     if (scoreContainer.current) {
@@ -28,7 +28,6 @@ const Player: FunctionComponent = () => {
       scoreRenderer.resize(530, 110);
       scoreContext = scoreRenderer.getContext();
       tickContext = new TickContext();
-      tickContext.preFormat().setX(400);
       stave = new Stave(10, 10, 10000).addClef("treble");
       stave.setContext(scoreContext).draw();
     }
@@ -36,23 +35,29 @@ const Player: FunctionComponent = () => {
 
   const drawNote = (note: string) => {
     const scoreNote: Vex.Flow.StaveNote = new StaveNote({
-      keys: [note],
+        keys: [note],
       duration: "4",
     });
-
+    
     scoreNote.setContext(scoreContext).setStave(stave);
-
-    tickContext.addTickable(scoreNote);
+    
     const group = scoreContext.openGroup();
+    if(note.substring(2,3) === '/') { scoreNote.addAccidental(0, new Vex.Flow.Accidental(note.substring(1,2))); }
+    tickContext.addTickable(scoreNote);
+    tickContext.preFormat().setX(400);
     scoreNote.draw();
     scoreContext.closeGroup();
+    
+    // @ts-expect-error
     group.classList.add("scroll");
+    // @ts-expect-error
     const box = group.getBoundingClientRect();
+    // @ts-expect-error
     group.classList.add("scrolling");
   };
 
   const playNote = (synth: Tone.Synth, note: string, time: number) => {
-    synth.triggerAttackRelease(note, "8n", time);
+    synth.triggerAttackRelease(note, "4n", time);
   };
 
   const play = () =>
@@ -64,7 +69,7 @@ const Player: FunctionComponent = () => {
           onNewDigit(digit, synth, time);
         }, "4n").start(0)
       )
-      .then(() => Tone.Transport.start())
+      .then((_loop) => Tone.Transport.start())
       .catch((err) => {
         console.error(err);
         Tone.Transport.stop().cancel(0);
