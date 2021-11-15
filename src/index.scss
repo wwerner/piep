@@ -1,12 +1,11 @@
-
 .app {
-  margin-top: 25px;
+  margin-top: 20px;
   width: 100vw;
   height: 100vw;
 }
 
 .main {
-    width: 550px;
+  width: 550px;
   margin: auto;
   padding-left: 10px;
   padding-right: 10px;
@@ -16,23 +15,23 @@
 }
 
 .scroll {
-    transition: transform 5s linear;
+  transition: transform 5s linear;
 }
 
 .scrolling {
-    transform: translate(-400px, 0);
+  transform: translate(-400px, 0);
   animation: fadeout 5.2s ease-out forwards;
 }
 
 @keyframes fadeout {
-    50% {
-        opacity: 1;
-    }
-    100% {
-      opacity: 0;
-    }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 .pi {
-    word-wrap: break-word;
+  word-wrap: break-word;
 }

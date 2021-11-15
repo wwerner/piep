@@ -96,11 +96,12 @@ const Player: FunctionComponent = () => {
 
   return (
     <div className="player">
+      <div ref={scoreContainer} style={{ marginBottom: "15px" }}></div>
       <button
         className="button is-large is-primary"
         onClick={play}
         aria-label="Play"
-        style={{ width: "260px", marginRight: "10px" }}
+        style={{ width: "256.5px", marginRight: "10px", marginLeft: "7px" }}
       >
         <span className="icon is-medium">
           <i className="far fa-2x fa-play-circle"></i>
@@ -111,15 +112,26 @@ const Player: FunctionComponent = () => {
         className="button is-large is-danger"
         onClick={stop}
         aria-label="Stop"
-        style={{ width: "260px" }}
+        style={{ width: "256.5px", marginBottom: "10px" }}
       >
         <span className="icon is-medium">
           <i className="far fa-2x fa-stop-circle"></i>
         </span>
       </button>
 
-      <div ref={scoreContainer}></div>
-      <div className="pi is-size-4">{pi ? pi : (<button style={{border: 0, backgroundColor:"transparent"}} className="button is-loading"></button>)}</div>
+      <div
+        className="pi is-size-4"
+        style={{ width: "100%", textAlign: "center" }}
+      >
+        {pi ? (
+          pi
+        ) : (
+          <button
+            style={{ border: 0, backgroundColor: "transparent" }}
+            className="button is-loading is-large"
+          ></button>
+        )}
+      </div>
     </div>
   );
 };

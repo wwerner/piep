@@ -7,7 +7,7 @@ const App = () => {
   return (
     <div className="app">
       <div className="main">
-        <section className="hero" style={{textAlign: "center", marginBottom: "20px"}}>
+        <section className="hero" style={{textAlign: "center"}}>
           <p className="title">
             <span className="icon">
               <i className="fab fa-itunes-note"></i>
@@ -16,11 +16,6 @@ const App = () => {
             <span className="icon">
               <i className="fab fa-itunes-note"></i>
             </span>
-          </p>
-          <p className="subtitle is-size-3">
-            This is what π could sound like.
-            <br />
-            How many digits can you bear?
           </p>
         </section>
         <Player />
