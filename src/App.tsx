@@ -2,7 +2,7 @@ import * as React from "react";
 
 import "./App.css";
 
-import { Player, Pi } from "./components";
+import { Player } from "./components";
 
 const App = () => {
   return (
@@ -10,7 +10,6 @@ const App = () => {
       <div className="main">
         <h1>π</h1>
         <Player />
-        <Pi />
       </div>
     </div>
   );

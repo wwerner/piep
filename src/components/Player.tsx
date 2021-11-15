@@ -1,5 +1,5 @@
 import * as React from "react";
-import { FunctionComponent, useEffect, useRef } from "react";
+import { FunctionComponent, useEffect, useRef, useState } from "react";
 
 import * as Tone from "tone";
 import Vex from "vexflow";
@@ -18,6 +18,8 @@ const Player: FunctionComponent = () => {
   let stave: Vex.Flow.Stave;
   let tickContext: Vex.Flow.TickContext;
 
+  const [pi, setPi] = useState("");
+
   useEffect(() => {
     if (scoreContainer.current) {
       scoreRenderer = new Renderer(
@@ -35,19 +37,21 @@ const Player: FunctionComponent = () => {
 
   const drawNote = (note: string) => {
     const scoreNote: Vex.Flow.StaveNote = new StaveNote({
-        keys: [note],
+      keys: [note],
       duration: "4",
     });
-    
+
     scoreNote.setContext(scoreContext).setStave(stave);
-    
+
     const group = scoreContext.openGroup();
-    if(note.substring(2,3) === '/') { scoreNote.addAccidental(0, new Vex.Flow.Accidental(note.substring(1,2))); }
+    if (note.substring(2, 3) === "/") {
+      scoreNote.addAccidental(0, new Vex.Flow.Accidental(note.substring(1, 2)));
+    }
     tickContext.addTickable(scoreNote);
     tickContext.preFormat().setX(400);
     scoreNote.draw();
     scoreContext.closeGroup();
-    
+
     // @ts-expect-error
     group.classList.add("scroll");
     // @ts-expect-error
@@ -58,6 +62,10 @@ const Player: FunctionComponent = () => {
 
   const playNote = (synth: Tone.Synth, note: string, time: number) => {
     synth.triggerAttackRelease(note, "4n", time);
+  };
+
+  const drawDigit = (digit: number) => {
+    setPi((s) => s === '' ? `${digit}.` : `${s}${digit}`); // add decimal separator after first digit
   };
 
   const play = () =>
@@ -83,6 +91,7 @@ const Player: FunctionComponent = () => {
     let idx = DEFAULT_NOTE_IDX + digit;
     playNote(synth, NOTES[idx], time);
     drawNote(SCORE_NOTES[idx]);
+    drawDigit(digit);
   };
 
   return (
@@ -90,6 +99,7 @@ const Player: FunctionComponent = () => {
       <button onClick={play}>Listen to π</button>
       <button onClick={stop}>OMG, stahp!</button>
       <div ref={scoreContainer}></div>
+      <div className="pi">{pi}</div>
     </div>
   );
 };
