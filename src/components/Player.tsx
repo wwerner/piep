@@ -15,8 +15,8 @@ const Player: FunctionComponent = () => {
   const scoreContainer = useRef<HTMLDivElement>(null);
   let scoreRenderer;
   let scoreContext: Vex.IRenderContext;
-  let stave: Vex.Flow.Stave;
   let tickContext: Vex.Flow.TickContext;
+  let stave: Vex.Flow.Stave;
 
   const [pi, setPi] = useState("");
 
@@ -48,7 +48,7 @@ const Player: FunctionComponent = () => {
       scoreNote.addAccidental(0, new Vex.Flow.Accidental(note.substring(1, 2)));
     }
     tickContext.addTickable(scoreNote);
-    tickContext.preFormat().setX(400);
+    tickContext.preFormat().setX(460);
     scoreNote.draw();
     scoreContext.closeGroup();
 
