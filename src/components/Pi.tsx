@@ -1,7 +1,7 @@
 import * as React from "react";
 import { digitGenerator } from "../pi";
 
-export const Pi = () => {
+const  Pi = () => {
   const digits = digitGenerator();
 
   const onProduce = () => {};
@@ -16,8 +16,9 @@ export const Pi = () => {
 
   return (
     <div style={{wordWrap: "break-word"}}>
-      <h1>π</h1>
       <p>3.{decimalPlaces.join('')}</p>
     </div>
   );
 };
+
+export default Pi

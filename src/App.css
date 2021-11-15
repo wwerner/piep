@@ -12,7 +12,8 @@ body {
 .main {
   width: 550px;
   margin: auto;
-  padding: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
   border-radius: 5px;
   background: #f5f4ef;
   box-shadow: -20px 20px 60px #71706e, 20px -20px 60px #ffffff;
