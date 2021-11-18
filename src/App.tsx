@@ -2,13 +2,13 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 
 import * as Tone from "tone";
-import { Player } from "./components";
 import { useSynth } from "./components/Audio";
+import { Visuals } from "./components/Visuals";
 
 import { digitGenerator } from "./pi";
 
 const digits = digitGenerator();
-const chunkSize = 3;
+const chunkSize = 1;
 
 const App = () => {
   const [started, setStarted] = useState(false);
@@ -50,19 +50,11 @@ const App = () => {
           ></i>
         </div>
       </div>
-      <div className="main">
-        <section className="hero" style={{ textAlign: "center" }}>
-          <p className="title">
-            <span className="icon">
-              <i className="fab fa-itunes-note"></i>
-            </span>{" "}
-            <span className="is-size-1">π</span>{" "}
-            <span className="icon">
-              <i className="fab fa-itunes-note"></i>
-            </span>
-          </p>
-        </section>
-        <Player />
+      <div style={{width:"25vw"}}>
+       <Visuals chunk={chunk} time={time} />
+       </div>
+      <div style={{width:"55vw"}}>
+       <Visuals chunk={chunk} time={time} />
       </div>
     </div>
   );

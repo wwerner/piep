@@ -20,7 +20,7 @@ export const NOTES = [
 ];
 const BASE_NOTE_IDX = 48; // C4
 
-export const useSynth = (digits: number[], time: Tone.Unit.Time) => {
+export const useSynth = (chunk: number[], time: Tone.Unit.Time) => {
   const [synth, setSynth] = useState<Tone.PolySynth | undefined>(undefined);
 
   useEffect(() => {
@@ -28,13 +28,14 @@ export const useSynth = (digits: number[], time: Tone.Unit.Time) => {
   }, []);
 
   useEffect(() => {
-    console.log("audio", digits);
-    const notes: Tone.Unit.Frequency[] = [];
     if (synth) {
-      digits.forEach((d) => {
-        notes.push(NOTES[BASE_NOTE_IDX + d]);
-      });
-      synth.triggerAttackRelease(notes, "8n", time, .5);
+      synth.triggerAttackRelease(
+        chunk.map((d) => NOTES[BASE_NOTE_IDX + d]),
+        "8n",
+        time,
+        0.5
+      );
     }
-  }, [digits]);
+  }, [time]);
+  
 };
