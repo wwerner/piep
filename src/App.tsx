@@ -3,44 +3,51 @@ import { useEffect, useState } from "react";
 
 import * as Tone from "tone";
 import { Player } from "./components";
+import { useSynth } from "./components/Audio";
 
 import { digitGenerator } from "./pi";
 
 const digits = digitGenerator();
+const chunkSize = 3;
 
 const App = () => {
-  const [synth, setSynth] = useState<Tone.Synth | undefined>(undefined);
   const [started, setStarted] = useState(false);
-
   const start = () => setStarted(true);
+
+  const [chunk, setChunk] = useState<number[]>([]);
+  const [time, setTime] = useState<Tone.Unit.Time>(0);
+
+  useSynth(chunk, time);
 
   useEffect(() => {
     Tone.start()
-      .then(() => new Tone.Synth().toDestination())
-      .then((synth) => setSynth(synth))
       .then(() =>
         new Tone.Loop((time) => {
-          let digit = digits.next().value;
-          onNewDigit(digit);
+          setTime(time);
+          nextChunk();
         }, "4n").start(0)
       )
-      .then((_loop) => Tone.Transport.start())
+      .then((_loop) => {
+        Tone.Transport.start();
+      })
       .catch((err) => {
         console.error(err);
         Tone.Transport.stop().cancel(0);
       });
   }, [started]);
 
-  const onNewDigit = (digit: number) => {
-    console.log(digit);
-  };
+  const nextChunk = () =>
+    setChunk(Array.from({ length: chunkSize }, () => digits.next().value));
 
   return (
     <div className="app">
       <div className={`modal ${started ? "" : "is-active"}`}>
         <div className="modal-background"></div>
         <div className="modal-content" style={{ textAlign: "center" }}>
-          <i className='play-button far fa-10x fa-play-circle' onClick={start}></i>
+          <i
+            className="play-button far fa-10x fa-play-circle"
+            onClick={start}
+          ></i>
         </div>
       </div>
       <div className="main">
