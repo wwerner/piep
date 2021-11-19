@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import * as Tone from "tone";
 import { Unit } from "tone";
+import { useCache } from "./Cache";
 
 // prettier-ignore
 export const NOTES = [ 
@@ -20,8 +21,10 @@ export const NOTES = [
 ];
 const BASE_NOTE_IDX = 48; // C4
 
-export const useSynth = (chunk: number[], time: Tone.Unit.Time) => {
+export const useSynth = (digit: number, time: Tone.Unit.Time) => {
   const [synth, setSynth] = useState<Tone.PolySynth | undefined>(undefined);
+
+  const cache = useCache(digit, 1)
 
   useEffect(() => {
     setSynth(new Tone.PolySynth().toDestination());
@@ -30,7 +33,7 @@ export const useSynth = (chunk: number[], time: Tone.Unit.Time) => {
   useEffect(() => {
     if (synth) {
       synth.triggerAttackRelease(
-        chunk.map((d) => NOTES[BASE_NOTE_IDX + d]),
+        cache.map((d) => NOTES[BASE_NOTE_IDX + d]),
         "8n",
         time,
         0.5
