@@ -21,7 +21,6 @@ export const Polkadots = ({ digit, time }: VisualsProps) => {
 
   useEffect(() => {
     if (cache.length > 4) {
-      console.log(cache, dots);
       setDots((s) =>
         [
           {

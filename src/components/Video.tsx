@@ -8,7 +8,6 @@ const asRgbPart = (digits: number[]) =>
   (digits[0] * 100 + digits[1] * 10 + digits[2]) % 255;
 
 export const asRgbString = (digits: number[]) => {
-  console.log(digits);
   return (
     "rgb(" + // reads nicer than as template string
     asRgbPart(digits.slice(0, 3)) +

@@ -46,9 +46,14 @@ const App = () => {
           </i>
         </div>
       </div>
-      <div style={{ width: "55vw" }}>
-        <Pixels digit={currentDigit} time={time} />
-        <Polkadots digit={currentDigit} time={time} />
+      <div className="columns is-gapless">
+        
+            <div className="column">
+              <Pixels digit={currentDigit} time={time} />
+            </div>
+            <div className="column">
+              <Polkadots digit={currentDigit} time={time} />
+            </div>
       </div>
     </div>
   );

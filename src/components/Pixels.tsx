@@ -43,9 +43,8 @@ export const Pixels = ({ digit, time }: VisualsProps) => {
     setIndex((s) => ++s);
     setPosition([
       ((index * rectSize) % width),
-      Math.floor(index * rectSize / width) * rectSize,
+      (Math.floor(index * rectSize / width) * rectSize) % height,
     ]);
-    console.log(index, position);
     
     if (svg.current) {
       // adding directly to svg to get around constant state recomputation
