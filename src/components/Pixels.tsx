@@ -50,7 +50,7 @@ export const Pixels = ({ digit, time }: VisualsProps) => {
     if (svg.current) {
       // adding directly to svg to get around constant state recomputation
       const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-      rect.setAttribute("fill", "hotpink");
+      rect.setAttribute("fill", color);
       rect.setAttribute("width", rectSize.toString());
       rect.setAttribute("height", rectSize.toString());
       rect.setAttribute("x", position[0].toString());
