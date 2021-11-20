@@ -3,11 +3,8 @@ import { useColor } from "./Video";
 
 import * as CSS from "csstype";
 import { useCache } from "./Cache";
+import { VisualsProps } from "~/types";
 
-type VisualsProps = {
-  digit: number;
-  time: any;
-};
 
 type CircleDefinition = {
   fill: CSS.Property.Color;
@@ -16,11 +13,11 @@ type CircleDefinition = {
   cy: number;
   key?: string;
 };
-export const Polkadots = ({ digit: chunk, time }: VisualsProps) => {
+export const Polkadots = ({ digit, time }: VisualsProps) => {
   const maxDots = 15;
-  const color = useColor(chunk, time);
+  const color = useColor(digit, time);
   const [dots, setDots] = useState<CircleDefinition[]>([]);
-  const cache = useCache(chunk, 5)
+  const cache = useCache(digit, 5)
 
   useEffect(() => {
     if (cache.length > 4) {

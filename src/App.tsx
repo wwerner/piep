@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 
 import * as Tone from "tone";
 import { useSynth } from "./components/Audio";
+import { Pixels } from "./components/Pixels";
 import { Polkadots } from "./components/Polkadots";
 
 import { digitGenerator } from "./pi";
 
 const digits = digitGenerator();
-const chunkSize = 1;
 
 const App = () => {
   const [started, setStarted] = useState(false);
@@ -47,6 +47,7 @@ const App = () => {
         </div>
       </div>
       <div style={{ width: "55vw" }}>
+        <Pixels digit={currentDigit} time={time} />
         <Polkadots digit={currentDigit} time={time} />
       </div>
     </div>
