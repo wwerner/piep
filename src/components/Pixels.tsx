@@ -14,7 +14,7 @@ export const Pixels = ({ digit, time }: VisualsProps) => {
 
 
   useEffect(() => {
-    for (let i = rectSize; i < width; i = i + rectSize) {
+    for (let i = 0; i <= width; i = i + rectSize) {
       if (svg.current) {
         // adding directly to svg to get around constant state recomputation
         const l1 = document.createElementNS("http://www.w3.org/2000/svg", "line");
@@ -60,7 +60,7 @@ export const Pixels = ({ digit, time }: VisualsProps) => {
   }, [time]);
 
   return (
-    <div style={{ backgroundColor: "slategray" }}>
+    <div>
       <svg viewBox={`0 0 ${width} ${height}`} ref={svg}>
         <rect width="100%" height="100%" fill="slategray" />
       </svg>

@@ -47,7 +47,6 @@ const App = () => {
         </div>
       </div>
       <div className="columns is-gapless">
-        
             <div className="column">
               <Pixels digit={currentDigit} time={time} />
             </div>
