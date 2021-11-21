@@ -2,6 +2,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 
 import * as Tone from "tone";
+import { PolkadotsAnimated } from "./components";
 import { useSynth } from "./components/Audio";
 import { Pixels } from "./components/Pixels";
 import { Polkadots } from "./components/Polkadots";
@@ -46,13 +47,19 @@ const App = () => {
           </i>
         </div>
       </div>
-      <div className="columns is-gapless">
-            <div className="column">
-              <Pixels digit={currentDigit} time={time} />
-            </div>
-            <div className="column">
-              <Polkadots digit={currentDigit} time={time} />
-            </div>
+      <div className="columns is-gapless is-multiline">
+        <div className="column is-3">
+          <PolkadotsAnimated digit={currentDigit} time={time} />
+        </div>
+        <div className="column is-3">
+          <Pixels digit={currentDigit} time={time} size={20} lines={true} />
+        </div>
+        <div className="column is-3">
+          <Pixels digit={currentDigit} time={time} size={7} />
+        </div>
+        <div className="column is-3">
+          <Polkadots digit={currentDigit} time={time} />
+        </div>
       </div>
     </div>
   );

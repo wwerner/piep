@@ -13,7 +13,7 @@ type CircleDefinition = {
   key?: string;
 };
 export const Polkadots = ({ digit, time }: VisualsProps) => {
-  const maxDots = 15;
+  const maxDots = 50;
   const color = useColor(digit, time);
   const [dots, setDots] = useState<CircleDefinition[]>([]);
   const cache = useCache(digit, 5);

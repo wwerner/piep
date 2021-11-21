@@ -9,7 +9,6 @@
 // @import "../node_modules/bulma/sass/layout/section.sass";
 
 .app {
-  
 }
 
 .fill {
@@ -35,6 +34,29 @@
   transform: translate(-455px, 0);
   animation: fadeout 5.1s ease-out forwards;
 }
+.polkadot-animated {
+  filter: drop-shadow( -4px -3px 3px rgba(255, 255, 255, .75));
+  animation: grow-in-out 13s ease-in-out forwards;
+}
+
+@keyframes grow-in-out {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  10% {
+    scale: 1;
+  }
+  40%  {
+    opacity: .5;
+  }
+  80% {
+  }
+  100% {
+    transform: scale(100);
+    opacity: .1;
+  }
+}
 
 @keyframes fadeout {
   90% {
@@ -54,6 +76,4 @@
   color: #ffffff;
 }
 
-.polkadot {
 
-}
