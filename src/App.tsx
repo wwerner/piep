@@ -15,26 +15,31 @@ import { digitGenerator } from "./pi";
 const digits = digitGenerator();
 
 const App = () => {
-  const [started, setStarted] = useState(false);
-  const start = () => setStarted(true);
+  const [modalClosed, setModalClosed] = useState(false);
 
-  const [currentDigit, setCurrentDigit] = useState<number>(0);
+  const [audioDigit, setAudioDigit] = useState<number>(0);
+  const [videoDigit, setVideoDigit] = useState<number>(0);
   const [time, setTime] = useState<Tone.Unit.Time>(0);
 
   const [scale, setScale] = useState<Scale>(Scales.wholeTone);
   const [root, setRoot] = useState<Note>("C3");
 
-  useSynth(currentDigit, time, scale, root);
-  const stopAudio = () => {
+  useSynth(audioDigit, time, scale, root);
+
+  const stop = () => {
     Tone.Transport.stop().cancel(0);
   };
 
-  const startAudio = () => {
+  const start = () => {
     Tone.start()
       .then(() =>
         new Tone.Loop((time) => {
+          const digit = digits.next().value 
           setTime(time);
-          setCurrentDigit(digits.next().value);
+          setAudioDigit(digit);
+          Tone.Draw.schedule(function(){
+            setVideoDigit(digit)
+          }, time)
         }, "4n").start(0)
       )
       .then((_loop) => {
@@ -42,24 +47,24 @@ const App = () => {
       })
       .catch((err) => {
         console.error(err);
-        stopAudio();
+        stop();
       });
   };
 
   useEffect(() => {
-    if (started) {
-      startAudio();
+    if (modalClosed) {
+      start();
     }
-  }, [started]);
+  }, [modalClosed]);
 
   return (
     <div className="app">
-      <div className={`modal ${started ? "" : "is-active"}`}>
+      <div className={`modal ${modalClosed ? "" : "is-active"}`}>
         <div className="modal-background"></div>
         <div className="modal-content" style={{ textAlign: "center" }}>
           <i
             className="play-button far fa-10x fa-play-circle"
-            onClick={start}
+            onClick={() => setModalClosed(true)}
             aria-label="Play"
           >
             {" "}
@@ -72,14 +77,14 @@ const App = () => {
           onSelectRoot={setRoot}
           scale={scale}
           onSelectScale={setScale}
-          onStart={startAudio}
-          onStop={stopAudio}
+          onStart={start}
+          onStop={stop}
         />
       </div>
       <div className="columns is-gapless is-multiline">
         <div className="column is-3">
           <PolkadotsAnimated
-            digit={currentDigit}
+            digit={videoDigit}
             time={time}
             palette={Palettes.redToGreen}
           />
@@ -87,14 +92,14 @@ const App = () => {
 
         <div className="column is-3">
           <Polkadots
-            digit={currentDigit}
+            digit={videoDigit}
             time={time}
             palette={Palettes.gulf2}
           />
         </div>
         <div className="column is-3">
           <Pixels
-            digit={currentDigit}
+            digit={videoDigit}
             time={time}
             size={20}
             lines={true}
@@ -103,7 +108,7 @@ const App = () => {
         </div>
         <div className="column is-3">
           <Pixels
-            digit={currentDigit}
+            digit={videoDigit}
             time={time}
             size={4}
             lines={true}
