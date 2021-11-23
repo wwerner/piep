@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 
 import * as Tone from "tone";
 import { PolkadotsAnimated } from "./components";
-import { Scales, useSynth } from "./components/Audio";
+import { Note, Scales, Scale, useSynth, RootNotes } from "./components/Audio";
+import { Controls } from "./components/Controls";
 import { Pixels } from "./components/Pixels";
 import { Polkadots } from "./components/Polkadots";
 import { Palettes } from "./components/Video";
@@ -20,24 +21,34 @@ const App = () => {
   const [currentDigit, setCurrentDigit] = useState<number>(0);
   const [time, setTime] = useState<Tone.Unit.Time>(0);
 
-  useSynth(currentDigit, time, Scales.wholeTone, "D#3");
+  const [scale, setScale] = useState<Scale>(Scales.wholeTone);
+  const [root, setRoot] = useState<Note>("C3");
+
+  useSynth(currentDigit, time, scale, root);
+  const stopAudio = () => {
+    Tone.Transport.stop().cancel(0);
+  };
+
+  const startAudio = () => {
+    Tone.start()
+      .then(() =>
+        new Tone.Loop((time) => {
+          setTime(time);
+          setCurrentDigit(digits.next().value);
+        }, "4n").start(0)
+      )
+      .then((_loop) => {
+        Tone.Transport.start();
+      })
+      .catch((err) => {
+        console.error(err);
+        stopAudio();
+      });
+  };
 
   useEffect(() => {
     if (started) {
-      Tone.start()
-        .then(() =>
-          new Tone.Loop((time) => {
-            setTime(time);
-            setCurrentDigit(digits.next().value);
-          }, "4n").start(0)
-        )
-        .then((_loop) => {
-          Tone.Transport.start();
-        })
-        .catch((err) => {
-          console.error(err);
-          Tone.Transport.stop().cancel(0);
-        });
+      startAudio();
     }
   }, [started]);
 
@@ -55,9 +66,17 @@ const App = () => {
           </i>
         </div>
       </div>
+      <div className="controls">
+        <Controls
+          root={root}
+          onSelectRoot={setRoot}
+          scale={scale}
+          onSelectScale={setScale}
+          onStart={startAudio}
+          onStop={stopAudio}
+        />
+      </div>
       <div className="columns is-gapless is-multiline">
-        {/*
-         */}
         <div className="column is-3">
           <PolkadotsAnimated
             digit={currentDigit}

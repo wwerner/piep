@@ -19,7 +19,7 @@ export type Note =
 "C11"| "C#11"| "D11"| "D#11"| "E11"| "E#11"| "F11"| "F#11"| "G11"| "G#11"| "A11"| "A#11"
 
 // prettier-ignore
-export const NOTES : Note[] = [ 
+export const Notes : Note[] = [ 
   "C0", "C#0", "D0", "D#0", "E0", "E#0", "F0", "F#0", "G0", "G#0", "A0", "A#0",
   "C1", "C#1", "D1", "D#1", "E1", "E#1", "F1", "F#1", "G1", "G#1", "A1", "A#1",
   "C2", "C#2", "D2", "D#2", "E2", "E#2", "F2", "F#2", "G2", "G#2", "A2", "A#2",
@@ -33,12 +33,16 @@ export const NOTES : Note[] = [
   "C10", "C#10", "D10", "D#10", "E10", "E#10", "F10", "F#10", "G10", "G#10", "A10", "A#10",
   "C11", "C#11", "D11", "D#11", "E11", "E#11", "F11", "F#11", "G11", "G#11", "A11", "A#11",
 ];
-const BASE_NOTE_IDX = 48; // C4
 
+// prettier-ignore
+export const RootNotes : Note[] = [
+  "C3", "C#3", "D3", "D#3", "E3", "E#3", "F3", "F#3", "G3", "G#3", "A3", "A#3",
+  "C4", "C#4", "D4", "D#4", "E4", "E#4", "F4", "F#4", "G4", "G#4", "A4", "A#4",
+]
 // describes the scale in intervals starting from the root node
-export type scale = number[];
+export type Scale = number[];
 
-export const Scales: Record<string, scale> = {
+export const Scales: Record<string, Scale> = {
   chromatic: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
   wholeTone: [0, 2, 4, 6, 8, 10, 12],
   major: [0, 2, 4, 5, 7, 9, 11, 12], //  T-T-S-T-T-T-S
@@ -48,10 +52,10 @@ export const Scales: Record<string, scale> = {
 export const useSynth = (
   digit: number,
   time: Tone.Unit.Time,
-  scale: scale = Scales.chromatic,
+  scale: Scale = Scales.chromatic,
   root: Note = "C4"
 ) => {
-  const rootNoteIdx = NOTES.findIndex((n) => n === root);
+  const rootNoteIdx = Notes.findIndex((n) => n === root);
   const [synth, setSynth] = useState<Tone.PolySynth | undefined>(undefined);
 
   const cache = useCache(digit, 1);
@@ -63,10 +67,10 @@ export const useSynth = (
   useEffect(() => {
     if (synth) {
       synth.triggerAttackRelease(
-        cache.map((d) => NOTES[rootNoteIdx + scale[d % scale.length]]),
+        cache.map((d) => Notes[rootNoteIdx + scale[d % scale.length]]),
         `${digit ? digit : "8n"}`,
         time,
-        1/ (4 * cache.length ) // make sure we're not clipping, take note duration and simulationously played notes into account
+        1/ (4 * cache.length ) // make sure we're not clipping, take note duration/simulationously played notes into account
       );
     }
   }, [time]);
