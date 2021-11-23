@@ -27,7 +27,7 @@ export const Controls = ({
     <div>
       <button onClick={onStart}>Start</button>
       <button onClick={onStop}>Stop</button>
-      <select defaultValue={root}>
+      <select onChange={setRoot} defaultValue={root}>
         {RootNotes.map((n) => (
           <option value={n} key={n}>
             {n}

@@ -68,7 +68,7 @@ export const useSynth = (
     if (synth) {
       synth.triggerAttackRelease(
         cache.map((d) => Notes[rootNoteIdx + scale[d % scale.length]]),
-        `${digit ? digit : "8n"}`,
+        `${digit ? digit : "8n"}`, //"8n",
         time,
         1/ (4 * cache.length ) // make sure we're not clipping, take note duration/simulationously played notes into account
       );
