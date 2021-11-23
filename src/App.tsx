@@ -3,13 +3,9 @@ import { useEffect, useState } from "react";
 
 import * as Tone from "tone";
 import { PolkadotsAnimated } from "./components";
-import {
-  Note,
-  Scales,
-  Scale,
-  useSynth,
-} from "./components/Audio";
+import { Note, Scales, Scale, useSynth } from "./components/Audio";
 import { Controls } from "./components/Controls";
+import { Pi } from "./components/Pi";
 import { Pixels } from "./components/Pixels";
 import { Polkadots } from "./components/Polkadots";
 import { Palettes } from "./components/Video";
@@ -22,7 +18,7 @@ const App = () => {
   const [modalClosed, setModalClosed] = useState(false);
 
   const [audioDigit, setAudioDigit] = useState<number>(0);
-  const [videoDigit, setVideoDigit] = useState<number>(0);
+  const [videoDigit, setVideoDigit] = useState<number>(3);
   const [time, setTime] = useState<Tone.Unit.Time>(0);
 
   const [scale, setScale] = useState<Scale>(Scales.wholeTone);
@@ -114,6 +110,9 @@ const App = () => {
             lines={true}
             palette={Palettes.gulf2}
           />
+        </div>
+        <div className="column is-12">
+          <Pi digit={videoDigit} />
         </div>
       </div>
     </div>

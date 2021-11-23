@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import * as Tone from "tone";
-import { Synth, Unit } from "tone";
+import { Unit } from "tone";
 import { useCache } from "./Cache";
 
 // prettier-ignore

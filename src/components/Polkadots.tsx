@@ -35,7 +35,7 @@ export const Polkadots = ({ digit, time }: VisualsProps) => {
   }, [time]);
 
   return (
-    <div>
+    <div className='m-0 p-0'>
       <svg viewBox="0 0 100 100">
         <rect width="100%" height="100%" fill="slategray" />
         {dots?.map((d, idx) => (

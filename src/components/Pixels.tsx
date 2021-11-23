@@ -83,7 +83,7 @@ export const Pixels = ({
   }, [time]);
 
   return (
-    <div>
+    <div className='m-0 p-0'>
       <svg viewBox={`0 0 ${canvasSize} ${canvasSize}`} ref={svg}>
         <rect width="100%" height="100%" fill="slategray" />
         {grid.map((row, yIdx) =>
