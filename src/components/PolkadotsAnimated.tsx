@@ -39,29 +39,6 @@ export const PolkadotsAnimated = ({ digit, time }: VisualsProps) => {
           ...s,
         ].slice(0, maxDots)
       );
-      // setTimeout(() => {
-      //   gsap
-      //     .timeline({ repeat: 0 })
-      //     .to(
-      //       q(`#${id}`),
-      //       {
-      //         transformOrigin: "center center",
-      //         ease: "power4.in",
-      //         autoAlpha: 0,
-      //         scale: 0.1,
-      //         duration: 1,
-      //         reversed: true,
-      //       },
-      //       5
-      //     )
-      //     .to(q(`#${id}`), {
-      //       transformOrigin: "center center",
-      //       autoAlpha: 0,
-      //       scale: 2,
-      //       ease: "power4.in",
-      //       duration: maxDots * 0.5,
-      //     });
-      // }, 0);
     }
   }, [time]);
 

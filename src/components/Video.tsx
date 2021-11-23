@@ -19,8 +19,8 @@ export const asRgbString = (digits: number[]) => {
   );
 };
 export const useColor = (digit: number, time: Tone.Unit.Time) => {
-  const [color, setColor] = useState<CSS.Property.Color>("black");
   const cache = useCache(digit, 9);
+  const [color, setColor] = useState<CSS.Property.Color>();
 
   useEffect(() => {
     setColor(asRgbString(cache));

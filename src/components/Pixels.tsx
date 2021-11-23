@@ -1,24 +1,47 @@
-import React, {  useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useColor } from "./Video";
+import * as CSS from "csstype";
 
-import { VisualsProps } from "~/types";
+import { Coordinate, VisualsProps } from "~/types";
 
-type PixelProps = VisualsProps & { lines?: boolean, size?: number }
+type PixelsProps = VisualsProps & { lines?: boolean; size?: number };
 
-export const Pixels = ({ digit, time, lines = false, size = 10}: PixelProps) => {
-  const rectSize = 2;
-  const canvasSize = size; // side length of square, even numbers work best
+type PixelDefinition = {
+  fill: CSS.Property.Color;
+  x: number;
+  y: number;
+};
+
+export const Pixels = ({
+  digit,
+  time,
+  lines = false,
+  size = 10,
+}: PixelsProps) => {
+  const pixelSize = 2;
+  const canvasSize = size * pixelSize;
   const color = useColor(digit, time);
-  const [position, setPosition] = useState([0, 0]);
   const [index, setIndex] = useState(0);
   const svg = useRef<SVGSVGElement>(null);
+  const [grid, setGrid] = useState<PixelDefinition[][]>(
+    Array.from({ length: canvasSize }, (_, y) =>
+      Array.from({ length: canvasSize }, (_, x) => ({
+        fill: "slategray",
+        x,
+        y,
+      }))
+    )
+  );
 
-
+  // add guide lines if @lines is set
   useEffect(() => {
-    for (let i = 0; i <= canvasSize; i = i + rectSize) {
+    // adding lines directly to svg; these are static and don't require to be rendered reactively
+    for (let i = 0; i <= canvasSize; i = i + pixelSize) {
       if (lines && svg.current) {
-        // adding directly to svg to get around constant state recomputation
-        const l1 = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        const l1 = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "line"
+        );
         l1.setAttribute("stroke", "#aeaeae");
         l1.setAttribute("stroke-width", "0.1");
         l1.setAttribute("y1", "0");
@@ -26,44 +49,57 @@ export const Pixels = ({ digit, time, lines = false, size = 10}: PixelProps) => 
         l1.setAttribute("x1", i.toString());
         l1.setAttribute("x2", i.toString());
         svg.current.appendChild(l1);
-        
-        const l2 = document.createElementNS("http://www.w3.org/2000/svg", "line");
+
+        const l2 = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "line"
+        );
         l2.setAttribute("stroke", "#aeaeae");
         l2.setAttribute("stroke-width", "0.1");
         l2.setAttribute("y1", i.toString());
         l2.setAttribute("y2", i.toString());
         l2.setAttribute("x1", "0");
         l2.setAttribute("x2", canvasSize.toString());
-  
+
         svg.current.appendChild(l2);
       }
     }
   }, []);
 
+  const updateGrid = (pixel: PixelDefinition) => {
+    setGrid((grid) => {
+      console.log(pixel.x, pixel.y);
+      grid[pixel.x][pixel.y] = pixel;
+      return grid;
+    });
+  };
+
   useEffect(() => {
     setIndex((s) => ++s);
-    setPosition([
-      ((index * rectSize) % canvasSize),
-      (Math.floor(index * rectSize / canvasSize) * rectSize) % canvasSize,
-    ]);
-    
-    if (svg.current) {
-      // adding directly to svg to get around constant state recomputation
-      const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-      rect.setAttribute("fill", color);
-      rect.setAttribute("width", rectSize.toString());
-      rect.setAttribute("height", rectSize.toString());
-      rect.setAttribute("x", position[0].toString());
-      rect.setAttribute("y", position[1].toString());
 
-      svg.current.appendChild(rect);
-    }
+    updateGrid({
+      fill: color,
+      x: index % size,
+      y: Math.floor((index / size) % size),
+    });
   }, [time]);
 
   return (
     <div>
       <svg viewBox={`0 0 ${canvasSize} ${canvasSize}`} ref={svg}>
         <rect width="100%" height="100%" fill="slategray" />
+        {grid.map((row, yIdx) =>
+          row.map(({ fill, x, y }, xIdx) => (
+            <rect
+              key={`pixel-${x}-${y}`}
+              fill={fill}
+              width={pixelSize}
+              height={pixelSize}
+              y={y * pixelSize}
+              x={x * pixelSize}
+            />
+          ))
+        )}
       </svg>
     </div>
   );
