@@ -109,6 +109,7 @@ const App = () => {
             size={4}
             lines={true}
             palette={Palettes.gulf2}
+            displayDigits={true}
           />
         </div>
         <div className="column is-12">

@@ -79,3 +79,5 @@ export const useSynth = (
     }
   }, [time]);
 };
+
+export const useBeat = () => {}

@@ -2,12 +2,27 @@ import React, { useEffect, useRef, useState } from "react";
 import { palette, useColor, VisualsProps } from "./Video";
 import * as CSS from "csstype";
 
-type PixelsProps = VisualsProps & { lines?: boolean; size?: number };
+type PixelsProps = VisualsProps & {
+  lines?: boolean;
+  size?: number;
+  displayDigits?: boolean;
+};
 
 type PixelDefinition = {
   fill: CSS.Property.Color | undefined;
+  digit: number;
   x: number;
   y: number;
+};
+
+const invertHex = (hex: string = '#FF0000') => {
+  return (
+    "#" +
+    (Number(`0x1${hex.substring(1)}`) ^ 0xffffff)
+      .toString(16)
+      .substring(1)
+      .toUpperCase()
+  );
 };
 
 export const Pixels = ({
@@ -16,6 +31,7 @@ export const Pixels = ({
   palette = undefined,
   lines = false,
   size = 10,
+  displayDigits = false,
 }: PixelsProps) => {
   const pixelSize = 2;
   const canvasSize = size * pixelSize;
@@ -26,6 +42,7 @@ export const Pixels = ({
     Array.from({ length: canvasSize }, (_, y) =>
       Array.from({ length: canvasSize }, (_, x) => ({
         fill: "slategray",
+        digit: -1,
         x,
         y,
       }))
@@ -77,25 +94,38 @@ export const Pixels = ({
 
     updateGrid({
       fill: color,
+      digit: digit,
       x: index % size,
       y: Math.floor((index / size) % size),
     });
   }, [time]);
 
   return (
-    <div className='m-0 p-0'>
+    <div className="m-0 p-0">
       <svg viewBox={`0 0 ${canvasSize} ${canvasSize}`} ref={svg}>
         <rect width="100%" height="100%" fill="slategray" />
         {grid.map((row, yIdx) =>
-          row.map(({ fill, x, y }, xIdx) => (
-            <rect
-              key={`pixel-${x}-${y}`}
-              fill={fill}
-              width={pixelSize}
-              height={pixelSize}
-              y={y * pixelSize}
-              x={x * pixelSize}
-            />
+          row.map(({ fill, x, y, digit }, xIdx) => (
+            <g>
+              <rect
+                key={`pixel-${x}-${y}`}
+                fill={fill}
+                width={pixelSize}
+                height={pixelSize}
+                y={y * pixelSize}
+                x={x * pixelSize}
+              ></rect>
+              {displayDigits && digit !== -1 && (
+                <text
+                  y={y * pixelSize + pixelSize * 0.87}
+                  x={x * pixelSize + pixelSize * 0.13}
+                  fontSize={pixelSize}
+                  fill={invertHex(fill)}
+                >
+                  {digit}
+                </text>
+              )}
+            </g>
           ))
         )}
       </svg>

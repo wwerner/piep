@@ -16,17 +16,14 @@ export type Coordinate = {
 };
 
 const asRgbPart = (digits: number[]) =>
-  (digits[0] * 100 + digits[1] * 10 + digits[2]) % 255;
+  ((digits[0] * 100 + digits[1] * 10 + digits[2]) % 255).toString(16);
 
 export const asRgbString = (digits: number[]) => {
   return (
-    "rgb(" + // reads nicer than as template string
+    "#" +
     asRgbPart(digits.slice(0, 3)) +
-    "," +
     asRgbPart(digits.slice(3, 6)) +
-    "," +
-    asRgbPart(digits.slice(6, 9)) +
-    ")"
+    asRgbPart(digits.slice(6, 9))
   );
 };
 
