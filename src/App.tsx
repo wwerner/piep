@@ -23,20 +23,22 @@ const App = () => {
   useSynth(currentDigit, time, Scales.wholeTone, "D#3");
 
   useEffect(() => {
-    Tone.start()
-      .then(() =>
-        new Tone.Loop((time) => {
-          setTime(time);
-          setCurrentDigit(digits.next().value);
-        }, "4n").start(0)
-      )
-      .then((_loop) => {
-        Tone.Transport.start();
-      })
-      .catch((err) => {
-        console.error(err);
-        Tone.Transport.stop().cancel(0);
-      });
+    if (started) {
+      Tone.start()
+        .then(() =>
+          new Tone.Loop((time) => {
+            setTime(time);
+            setCurrentDigit(digits.next().value);
+          }, "4n").start(0)
+        )
+        .then((_loop) => {
+          Tone.Transport.start();
+        })
+        .catch((err) => {
+          console.error(err);
+          Tone.Transport.stop().cancel(0);
+        });
+    }
   }, [started]);
 
   return (
@@ -44,8 +46,12 @@ const App = () => {
       <div className={`modal ${started ? "" : "is-active"}`}>
         <div className="modal-background"></div>
         <div className="modal-content" style={{ textAlign: "center" }}>
-          <i className="play-button far fa-10x fa-play-circle" onClick={start}>
-            Play
+          <i
+            className="play-button far fa-10x fa-play-circle"
+            onClick={start}
+            aria-label="Play"
+          >
+            {" "}
           </i>
         </div>
       </div>
@@ -53,11 +59,19 @@ const App = () => {
         {/*
          */}
         <div className="column is-3">
-          <PolkadotsAnimated digit={currentDigit} time={time}  palette={Palettes.redToGreen} />
+          <PolkadotsAnimated
+            digit={currentDigit}
+            time={time}
+            palette={Palettes.redToGreen}
+          />
         </div>
 
         <div className="column is-3">
-          <Polkadots digit={currentDigit} time={time} palette={Palettes.gulf2}/>
+          <Polkadots
+            digit={currentDigit}
+            time={time}
+            palette={Palettes.gulf2}
+          />
         </div>
         <div className="column is-3">
           <Pixels

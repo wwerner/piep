@@ -57,16 +57,16 @@ export const useSynth = (
   const cache = useCache(digit, 1);
 
   useEffect(() => {
-    setSynth(new Tone.PolySynth().toDestination());
+    setSynth(new Tone.PolySynth(Tone.AMSynth).toDestination());
   }, []);
 
   useEffect(() => {
     if (synth) {
       synth.triggerAttackRelease(
         cache.map((d) => NOTES[rootNoteIdx + scale[d % scale.length]]),
-        "8n",
+        `${digit ? digit : "8n"}`,
         time,
-        0.5
+        1/ (4 * cache.length ) // make sure we're not clipping, take note duration and simulationously played notes into account
       );
     }
   }, [time]);
