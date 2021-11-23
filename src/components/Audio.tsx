@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import * as Tone from "tone";
-import { Unit } from "tone";
+import { Synth, Unit } from "tone";
 import { useCache } from "./Cache";
 
 // prettier-ignore
@@ -45,32 +45,32 @@ export type Scale = number[];
 export const Scales: Record<string, Scale> = {
   chromatic: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
   wholeTone: [0, 2, 4, 6, 8, 10, 12],
-  major: [0, 2, 4, 5, 7, 9, 11, 12], //  T-T-S-T-T-T-S
-  minor: [0, 2, 3, 5, 7, 8, 10, 12], //T-S-T-T-S-T-T
+  major: [0, 2, 4, 5, 7, 9, 11, 12], // T-T-S-T-T-T-S
+  minor: [0, 2, 3, 5, 7, 8, 10, 12], // T-S-T-T-S-T-T
 };
 
 export const useSynth = (
   digit: number,
   time: Tone.Unit.Time,
   scale: Scale = Scales.chromatic,
-  root: Note = "C4"
+  root: Note
 ) => {
   const rootNoteIdx = Notes.findIndex((n) => n === root);
   const [synth, setSynth] = useState<Tone.PolySynth | undefined>(undefined);
 
-  const cache = useCache(digit, 1);
+  const cache = useCache(digit, 3);
 
   useEffect(() => {
-    setSynth(new Tone.PolySynth(Tone.AMSynth).toDestination());
+    setSynth(new Tone.PolySynth(Tone.FMSynth).toDestination());
   }, []);
 
   useEffect(() => {
     if (synth) {
       synth.triggerAttackRelease(
-        cache.map((d) => Notes[rootNoteIdx + scale[d % scale.length]]),
-        `${digit ? digit : "8n"}`, //"8n",
+        Notes[rootNoteIdx + scale[cache[0] % scale.length]],
+        `${cache[1] > 0 ? cache[1] : "8n"}`, //"8n",
         time,
-        1 / (4 * cache.length) // make sure we're not clipping, take note duration/simulationously played notes into account
+        cache[2] / 50
       );
     }
   }, [time]);

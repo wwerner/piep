@@ -1,10 +1,14 @@
-import { RSA_PSS_SALTLEN_DIGEST } from "constants";
 import * as React from "react";
 import { useEffect, useState } from "react";
 
 import * as Tone from "tone";
 import { PolkadotsAnimated } from "./components";
-import { Note, Scales, Scale, useSynth, RootNotes } from "./components/Audio";
+import {
+  Note,
+  Scales,
+  Scale,
+  useSynth,
+} from "./components/Audio";
 import { Controls } from "./components/Controls";
 import { Pixels } from "./components/Pixels";
 import { Polkadots } from "./components/Polkadots";
@@ -34,12 +38,12 @@ const App = () => {
     Tone.start()
       .then(() =>
         new Tone.Loop((time) => {
-          const digit = digits.next().value 
+          const digit = digits.next().value;
           setTime(time);
           setAudioDigit(digit);
-          Tone.Draw.schedule(function(){
-            setVideoDigit(digit)
-          }, time)
+          Tone.Draw.schedule(function () {
+            setVideoDigit(digit);
+          }, time);
         }, "4n").start(0)
       )
       .then((_loop) => {
@@ -91,11 +95,7 @@ const App = () => {
         </div>
 
         <div className="column is-3">
-          <Polkadots
-            digit={videoDigit}
-            time={time}
-            palette={Palettes.gulf2}
-          />
+          <Polkadots digit={videoDigit} time={time} palette={Palettes.gulf2} />
         </div>
         <div className="column is-3">
           <Pixels
