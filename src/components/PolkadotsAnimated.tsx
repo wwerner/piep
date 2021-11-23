@@ -1,13 +1,11 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { gsap, Quad } from "gsap";
 import * as CSS from "csstype";
 
-import { useColor } from "./Video";
+import { useColor, VisualsProps } from "./Video";
 import { useCache } from "./Cache";
-import { VisualsProps } from "~/types";
 
 type CircleDefinition = {
-  fill: CSS.Property.Color;
+  fill: CSS.Property.Color | undefined;
   r: number;
   cx: number;
   cy: number;
@@ -20,7 +18,6 @@ export const PolkadotsAnimated = ({ digit, time }: VisualsProps) => {
   const cache = useCache(digit, 5);
 
   const svg = useRef<SVGSVGElement>(null);
-  const q = gsap.utils.selector(svg);
 
   useEffect(() => {}, []);
 
@@ -31,7 +28,7 @@ export const PolkadotsAnimated = ({ digit, time }: VisualsProps) => {
         [
           {
             fill: color,
-            r: cache[0] / 2,
+            r: Math.ceil(cache[0] / 2),
             cx: cache[0],
             cy: cache[0],
             id,

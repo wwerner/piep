@@ -1,13 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useColor } from "./Video";
+import { palette, useColor, VisualsProps } from "./Video";
 import * as CSS from "csstype";
-
-import { Coordinate, VisualsProps } from "~/types";
 
 type PixelsProps = VisualsProps & { lines?: boolean; size?: number };
 
 type PixelDefinition = {
-  fill: CSS.Property.Color;
+  fill: CSS.Property.Color | undefined;
   x: number;
   y: number;
 };
@@ -15,12 +13,13 @@ type PixelDefinition = {
 export const Pixels = ({
   digit,
   time,
+  palette = undefined,
   lines = false,
   size = 10,
 }: PixelsProps) => {
   const pixelSize = 2;
   const canvasSize = size * pixelSize;
-  const color = useColor(digit, time);
+  const color = useColor(digit, time, palette);
   const [index, setIndex] = useState(0);
   const svg = useRef<SVGSVGElement>(null);
   const [grid, setGrid] = useState<PixelDefinition[][]>(
@@ -68,7 +67,6 @@ export const Pixels = ({
 
   const updateGrid = (pixel: PixelDefinition) => {
     setGrid((grid) => {
-      console.log(pixel.x, pixel.y);
       grid[pixel.x][pixel.y] = pixel;
       return grid;
     });

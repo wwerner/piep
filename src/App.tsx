@@ -1,11 +1,13 @@
+import { RSA_PSS_SALTLEN_DIGEST } from "constants";
 import * as React from "react";
 import { useEffect, useState } from "react";
 
 import * as Tone from "tone";
 import { PolkadotsAnimated } from "./components";
-import { useSynth } from "./components/Audio";
+import { Scales, useSynth } from "./components/Audio";
 import { Pixels } from "./components/Pixels";
 import { Polkadots } from "./components/Polkadots";
+import { Palettes } from "./components/Video";
 
 import { digitGenerator } from "./pi";
 
@@ -18,7 +20,7 @@ const App = () => {
   const [currentDigit, setCurrentDigit] = useState<number>(0);
   const [time, setTime] = useState<Tone.Unit.Time>(0);
 
-  useSynth(currentDigit, time);
+  useSynth(currentDigit, time, Scales.wholeTone, "D#3");
 
   useEffect(() => {
     Tone.start()
@@ -49,20 +51,31 @@ const App = () => {
       </div>
       <div className="columns is-gapless is-multiline">
         {/*
+         */}
         <div className="column is-3">
-          <PolkadotsAnimated digit={currentDigit} time={time} />
+          <PolkadotsAnimated digit={currentDigit} time={time}  palette={Palettes.redToGreen} />
         </div>
 
-     
         <div className="column is-3">
-          <Polkadots digit={currentDigit} time={time} />
-        </div>
-      */}
-        <div className="column is-3">
-          <Pixels digit={currentDigit} time={time} size={20} lines={true} />
+          <Polkadots digit={currentDigit} time={time} palette={Palettes.gulf2}/>
         </div>
         <div className="column is-3">
-          <Pixels digit={currentDigit} time={time} size={4} lines={true} />
+          <Pixels
+            digit={currentDigit}
+            time={time}
+            size={20}
+            lines={true}
+            palette={Palettes.muted}
+          />
+        </div>
+        <div className="column is-3">
+          <Pixels
+            digit={currentDigit}
+            time={time}
+            size={4}
+            lines={true}
+            palette={Palettes.gulf2}
+          />
         </div>
       </div>
     </div>

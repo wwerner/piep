@@ -1,12 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useColor } from "./Video";
+import { useColor, VisualsProps } from "./Video";
 
 import * as CSS from "csstype";
 import { useCache } from "./Cache";
-import { VisualsProps } from "~/types";
 
 type CircleDefinition = {
-  fill: CSS.Property.Color;
+  fill: CSS.Property.Color | undefined;
   r: number;
   cx: number;
   cy: number;
@@ -24,7 +23,7 @@ export const Polkadots = ({ digit, time }: VisualsProps) => {
         [
           {
             fill: color,
-            r: cache[0] / 2,
+            r: Math.ceil(cache[0] / 2),
             cx: Math.max(cache[0], 10 * cache[1] + cache[2] - 2 * cache[0]),
             cy: Math.max(cache[0], 10 * cache[3] + cache[4] - 2 * cache[0]),
             key: cache.reduce((i, acc) => acc + i, ""),
