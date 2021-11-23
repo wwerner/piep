@@ -49,7 +49,8 @@ export const Scales: Record<string, Scale> = {
   minor: [0, 2, 3, 5, 7, 8, 10, 12], // T-S-T-T-S-T-T
 };
 
-const velocities = [0.05, 0.1, 0.15];
+const velocities = [0.1, 0.15, 0.2];
+const lengths = ["8n", "16n", "4n", "8n", "2n"];
 
 export const useSynth = (
   digit: number,
@@ -63,7 +64,7 @@ export const useSynth = (
   const cache = useCache(digit, 3);
 
   useEffect(() => {
-    const limiter = new Tone.Limiter(-20).toDestination();
+    const limiter = new Tone.Limiter(-10).toDestination();
     setSynth(new Tone.PolySynth(Tone.FMSynth).connect(limiter).toDestination());
   }, []);
 
@@ -71,9 +72,9 @@ export const useSynth = (
     if (synth) {
       synth.triggerAttackRelease(
         Notes[rootNoteIdx + scale[cache[0] % scale.length]],
-        `${cache[1] > 0 ? cache[1] : "8n"}`, //"8n",
+        lengths[cache[1] > 0 ? cache[1] % lengths.length : 0],
         time,
-        velocities[cache[2] === -1 ? 0 : cache[2] % velocities.length]
+        velocities[cache[2] > -1 ? (cache[2] % velocities.length) : 0]
       );
     }
   }, [time]);
