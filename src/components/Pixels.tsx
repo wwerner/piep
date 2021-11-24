@@ -123,7 +123,7 @@ export const Pixels = ({
                   x={x * pixelSize + pixelSize/2}
               y={y * pixelSize + pixelSize/2}
                   textAnchor="middle"
-                  dominant-baseline="central"
+                  dominantBaseline="central"
                   fontSize={pixelSize}
                   fill={invertHex(fill)}
                 >
