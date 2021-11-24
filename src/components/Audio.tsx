@@ -53,7 +53,7 @@ const velocities = [0.1, 0.15, 0.2];
 const lengths = ["8n", "16n", "4n", "8n", "2n"];
 
 export const useSynth = (
-  digit: number,
+  digit: number | undefined,
   time: Tone.Unit.Time,
   scale: Scale = Scales.chromatic,
   root: Note

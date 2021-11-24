@@ -15,7 +15,7 @@ type PixelDefinition = {
   y: number;
 };
 
-const invertHex = (hex: string = '#FF0000') => {
+const invertHex = (hex: string = "#FF0000") => {
   return (
     "#" +
     (Number(`0x1${hex.substring(1)}`) ^ 0xffffff)
@@ -90,6 +90,8 @@ export const Pixels = ({
   };
 
   useEffect(() => {
+    if (digit === undefined) return;
+
     setIndex((s) => ++s);
 
     updateGrid({
@@ -106,9 +108,9 @@ export const Pixels = ({
         <rect width="100%" height="100%" fill="slategray" />
         {grid.map((row, yIdx) =>
           row.map(({ fill, x, y, digit }, xIdx) => (
-            <g>
+            <g key={`pixel-${x}-${y}`}>
               <rect
-                key={`pixel-${x}-${y}`}
+                key={`rect-${x}-${y}`}
                 fill={fill}
                 width={pixelSize}
                 height={pixelSize}
@@ -117,8 +119,11 @@ export const Pixels = ({
               ></rect>
               {displayDigits && digit !== -1 && (
                 <text
-                  y={y * pixelSize + pixelSize * 0.87}
-                  x={x * pixelSize + pixelSize * 0.13}
+                  key={`text-${x}-${y}`}
+                  x={x * pixelSize + pixelSize/2}
+              y={y * pixelSize + pixelSize/2}
+                  textAnchor="middle"
+                  dominant-baseline="central"
                   fontSize={pixelSize}
                   fill={invertHex(fill)}
                 >

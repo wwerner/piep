@@ -17,8 +17,8 @@ const digits = digitGenerator();
 const App = () => {
   const [modalClosed, setModalClosed] = useState(false);
 
-  const [audioDigit, setAudioDigit] = useState<number>(0);
-  const [videoDigit, setVideoDigit] = useState<number>(3);
+  const [audioDigit, setAudioDigit] = useState<number>();
+  const [videoDigit, setVideoDigit] = useState<number>();
   const [time, setTime] = useState<Tone.Unit.Time>(0);
 
   const [scale, setScale] = useState<Scale>(Scales.wholeTone);
@@ -107,7 +107,6 @@ const App = () => {
             digit={videoDigit}
             time={time}
             size={4}
-            lines={true}
             palette={Palettes.gulf2}
             displayDigits={true}
           />

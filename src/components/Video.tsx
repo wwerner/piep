@@ -5,7 +5,7 @@ import * as CSS from "csstype";
 import { useCache } from "./Cache";
 
 export type VisualsProps = {
-  digit: number;
+  digit: number | undefined;
   time: any;
   palette?: palette;
 };
@@ -39,20 +39,20 @@ export const Palettes: Record<string, palette> = {
 };
 
 export const useColor = (
-  digit: number,
+  digit: number | undefined,
   time: Tone.Unit.Time,
   palette?: palette
 ) => {
+  const cache = useCache(digit, 9);
   const [color, setColor] = useState<CSS.Property.Color>();
-  if (palette) {
-    useEffect(() => {
+
+  useEffect(() => {
+    if (palette && digit !== undefined) {
       setColor(palette[digit]);
-    }, [time]);
-  } else {
-    const cache = useCache(digit, 9);
-    useEffect(() => {
+    } else if (digit !== undefined) {
       setColor(asRgbString(cache));
-    }, [time]);
-  }
+    }
+  }, [time]);
+
   return color;
 };

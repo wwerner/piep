@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 
-export const useCache = (digit: number, size: number) => {
-  const [cache, setCache] = useState(Array.from({ length: size }, () => -1));
+export const useCache = (digit: number | undefined, size: number) => {
+  const [cache, setCache] = useState(() =>
+    Array.from({ length: size }, () => -1)
+  );
 
   useEffect(() => {
-    setCache((s) => [digit, ...s].slice(0, size)); // poor man's ring buffer
+    if (digit) {
+      setCache((s) => [digit, ...s].slice(0, size)); // poor man's ring buffer
+    }
   }, [digit]);
 
-  return cache
+  return cache;
 };

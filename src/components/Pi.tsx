@@ -2,13 +2,15 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 
 type PiProps = {
-  digit: number;
+  digit: number | undefined ;
 };
 export const Pi = ({ digit }: PiProps) => {
   const [pi, setPi] = useState("");
 
   useEffect(() => {
-    setPi((s) => (s === "" ? `${digit}.` : `${s}${digit}`)); // add decimal separator after first digit
+    if (digit !== undefined) {
+      setPi((s) => (s === "" ? `${digit}.` : `${s}${digit}`)); // add decimal separator after first digit
+    }
   }, [digit]);
 
   return (

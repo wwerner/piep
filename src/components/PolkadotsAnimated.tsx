@@ -19,8 +19,6 @@ export const PolkadotsAnimated = ({ digit, time }: VisualsProps) => {
 
   const svg = useRef<SVGSVGElement>(null);
 
-  useEffect(() => {}, []);
-
   useEffect(() => {
     if (cache.length > 4) {
       const id = `polkadot-${new Date().getTime()}`;
